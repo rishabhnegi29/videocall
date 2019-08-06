@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<link rel="stylesheet" type="text/css" href="main.css">
+
+<link rel="stylesheet"
+	href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.0/css/bootstrap.min.css">
+<link rel="stylesheet"
+	href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<link rel="stylesheet"
+	href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+	integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay"
+	crossorigin="anonymous">
+<body>
+	
+	<div class="row">
+		<div id="message" class="col-sm-offset-2 col-sm-6 alert"></div>
+	</div>
+	<div class="text-danger" id="errorMsg"></div>
+	<form id="loginForm" name="loginForm" action="#">
+		Name: <input type="text" id="name" value="m1" /> room: <input
+			type="text" id="roomID" value="12123" />
+		<button id='submit' type="submit" value="Submit">Submit</button>
+	</form>
+	<div id="room" style="display: inline-block;">
+
+		<div id="participants" style="display: inline-block;"></div>
+
+	</div>
+
+
+</body>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/2.0.0/jquery.min.js"></script>
+<script src="intelliVideoClientSdk.js"></script>
+<script src="client_main.js"></script>
+<script src="conferenceroom.js"></script>
+<script src="participant.js"></script>
+<script src="kurento-utils.js"></script>
+<script src="adapter.js"></script>
+
+
+</html>
