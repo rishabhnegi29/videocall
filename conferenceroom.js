@@ -21,7 +21,7 @@ var appSecret="172451b2e917d6e08b52bc0d4324ee39c738b259";
 var password= "12345678";
 var username= "test123";
 var masterDiv='participants';
-console.log(location.host+" "+location.hostname);
+console.log(location.host+" "+location.port);
 var ws=null;
 var participants = {};
 var admin;
