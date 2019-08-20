@@ -170,6 +170,7 @@ function onExistingParticipants(msg) {
 				function (error) {
 				  if(error) {
 					  console.error(error);
+					  alert(error);
 				  }
 				  this.generateOffer (participant.offerToReceiveVideo.bind(participant));
 			});
