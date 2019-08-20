@@ -241,9 +241,9 @@ function receiveVideo(sender) {
 			  
 			  
 			
-			  participant.rtcPeer.peerConnection.getReceivers()[1].track.addEventListener("mute",
+			/*  participant.rtcPeer.peerConnection.getReceivers()[1].track.addEventListener("mute",
 			  event => { console.log(" video muted"); }, false);
-			 
+			 */
 			  participant.rtcPeer.peerConnection.getReceivers()[1].track.addEventListener("unmute", event => {
 				  console.log(" video un muted");
 				  stream.addTrack(participant.rtcPeer.peerConnection.getReceivers()[1].track);
