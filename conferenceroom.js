@@ -209,11 +209,11 @@ function receiveVideo(sender) {
 	participants[sender] = participant;
 	var video = participant.getVideoElement();
 	var constraints = {
-			audio : true,
+			audio : true/*,
 			video: {
 			    width: { min: 1024, ideal: 1280, max: 1920 },
 			    height: { min: 776, ideal: 720, max: 1080 }
-			  },
+			  },*/
 	};
 	var options = {
       // remoteVideo: video,
