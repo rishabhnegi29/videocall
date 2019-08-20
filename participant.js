@@ -43,6 +43,8 @@ function Participant(name, admin) {
 	video.autoplay = true;
 	video.controls = false;
 	video.style.height="150px"
+	video.setAttribute("playsinline", true);
+
 	
 	container.appendChild(video);
 	document.getElementById('participants').appendChild(container);
