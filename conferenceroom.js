@@ -253,8 +253,10 @@ function receiveVideo(sender) {
 			  video.srcObject=stream;
 			  
 			  video.addEventListener("error", function(e) {
-			        console.error("<video> error");
-			        console.error(e.target.error);
+			        //console.error("<video> error");
+			        //console.error(e.target.error);
+				//alert();
+			        alert("<video> error "+e.target.error);
 			        // e.target would be the <video> element
 			        // e.target.error --
 					// https://html.spec.whatwg.org/multipage/media.html#mediaerror
