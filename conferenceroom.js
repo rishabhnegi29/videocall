@@ -155,7 +155,7 @@ function onExistingParticipants(msg) {
 	var video = participant.getVideoElement();
 
 	console.log(videoFlag);
-	alert(videoFlag);
+	//alert(videoFlag);
 	promise=navigator.mediaDevices.getUserMedia({ audio: true, video: videoFlag })
 	promise.then(function(stream) {
 	var options = {
