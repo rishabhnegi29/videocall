@@ -155,6 +155,7 @@ function onExistingParticipants(msg) {
 	var video = participant.getVideoElement();
 
 	console.log(videoFlag);
+	alert(videoFlag);
 	promise=navigator.mediaDevices.getUserMedia({ audio: true, video: videoFlag })
 	promise.then(function(stream) {
 	var options = {
@@ -169,7 +170,7 @@ function onExistingParticipants(msg) {
 			participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options,
 				function (error) {
 				  if(error) {
-					  console.error(error);
+			//		  console.error(error);
 					  alert(error);
 				  }
 				  this.generateOffer (participant.offerToReceiveVideo.bind(participant));
