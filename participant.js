@@ -41,7 +41,7 @@ function Participant(name, admin) {
 	var rtcPeer;
 	video.id = 'video-' + name;
 	video.autoplay = true;
-	video.controls = true;
+	video.controls = false;
 	video.style.height="150px"
 	video.setAttribute("playsinline", true);
 
