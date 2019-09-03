@@ -1,3 +1,4 @@
+import adapter from 'webrtc-adapter';
 var base_url;
 var jwt_token;
 var icons={
