@@ -6,6 +6,7 @@
 
 localStorage.clear();
 var obj;
+import adapter from 'webrtc-adapter';
 
 
 $('#loginForm').on('submit', function(e) {
