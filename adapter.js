@@ -2362,13 +2362,13 @@ module.exports = function(dependencies, opts) {
   // require('./utils').disableLog(false);
 
   // Browser shims.
- /* var chromeShim = require('./chrome/chrome_shim') || null;
+  var chromeShim = require('./chrome/chrome_shim') || null;
   var edgeShim = require('./edge/edge_shim') || null;
   var firefoxShim = require('./firefox/firefox_shim') || null;
-  var safariShim = require('./safari/safari_shim') || null;
+ // var safariShim = require('./safari/safari_shim') || null;
   var commonShim = require('./common_shim') || null;
-*/
- var utils = _interopRequireWildcard(_utils);
+ 
+ /*var utils = _interopRequireWildcard(_utils);
 
 var _chrome_shim = require('./chrome/chrome_shim');
 
@@ -2381,15 +2381,15 @@ var edgeShim = _interopRequireWildcard(_edge_shim);
 var _firefox_shim = require('./firefox/firefox_shim');
 
 var firefoxShim = _interopRequireWildcard(_firefox_shim);
-
+*/
 var _safari_shim = require('./safari/safari_shim');
 
 var safariShim = _interopRequireWildcard(_safari_shim);
 
-var _common_shim = require('./common_shim');
+/*var _common_shim = require('./common_shim');
 
 var commonShim = _interopRequireWildcard(_common_shim);
-
+*/
 function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
  
  
