@@ -4275,7 +4275,7 @@ var safariShim = {
         });
         if (offerOptions.offerToReceiveAudio === false && audioTransceiver) {
           if (audioTransceiver.direction === 'sendrecv') {
-            audioTransceiver.setDirection('sendonly');
+            //audioTransceiver.setDirection('sendonly');
           } else if (audioTransceiver.direction === 'recvonly') {
             audioTransceiver.setDirection('inactive');
           }
