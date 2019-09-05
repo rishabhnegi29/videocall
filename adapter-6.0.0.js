@@ -4277,7 +4277,7 @@ var safariShim = {
           if (audioTransceiver.direction === 'sendrecv') {
             //audioTransceiver.setDirection('sendonly');
           } else if (audioTransceiver.direction === 'recvonly') {
-            audioTransceiver.setDirection('inactive');
+            //audioTransceiver.setDirection('inactive');
           }
         } else if (offerOptions.offerToReceiveAudio === true &&
             !audioTransceiver) {
@@ -4290,9 +4290,9 @@ var safariShim = {
         });
         if (offerOptions.offerToReceiveVideo === false && videoTransceiver) {
           if (videoTransceiver.direction === 'sendrecv') {
-            videoTransceiver.setDirection('sendonly');
+            //videoTransceiver.setDirection('sendonly');
           } else if (videoTransceiver.direction === 'recvonly') {
-            videoTransceiver.setDirection('inactive');
+            //videoTransceiver.setDirection('inactive');
           }
         } else if (offerOptions.offerToReceiveVideo === true &&
             !videoTransceiver) {
