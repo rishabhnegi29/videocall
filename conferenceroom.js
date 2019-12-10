@@ -175,7 +175,7 @@ function onExistingParticipants(msg) {
 				  }
 				  this.generateOffer (participant.offerToReceiveVideo.bind(participant));
 			});
-	})
+	}).catch(function (error) { alert(error) })
 
 	
 
