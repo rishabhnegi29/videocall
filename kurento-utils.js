@@ -228,7 +228,7 @@ function WebRtcPeer(mode, options, callback) {
                 candidategatheringdone = true;
         }
     });
-    pc.ontrack = options.onaddstream;
+    pc.onaddstream = options.onaddstream;
     pc.onnegotiationneeded = options.onnegotiationneeded;
     this.on('newListener', function (event, listener) {
         if (event === 'icecandidate' || event === 'candidategatheringdone') {
