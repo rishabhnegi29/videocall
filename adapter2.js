@@ -4572,9 +4572,9 @@ module.exports = {
         });
         if (offerOptions.offerToReceiveVideo === false && videoTransceiver) {
           if (videoTransceiver.direction === 'sendrecv') {
-            videoTransceiver.setDirection('sendonly');
+            //videoTransceiver.setDirection('sendonly');
           } else if (videoTransceiver.direction === 'recvonly') {
-            videoTransceiver.setDirection('inactive');
+            //videoTransceiver.setDirection('inactive');
           }
         } else if (offerOptions.offerToReceiveVideo === true &&
             !videoTransceiver) {
