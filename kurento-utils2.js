@@ -265,20 +265,46 @@ function WebRtcPeer(mode, options, callback) {
                 offerToReceiveVideo: mode !== 'sendonly' && offerVideo
             };
         var constraints = browserDependantConstraints;
-        logger.debug('constraints: ' + JSON.stringify(constraints));
-        pc.createOffer(constraints).then(function (offer) {
-            logger.debug('Created SDP offer');
-            offer = mangleSdpToAddSimulcast(offer);
-            return pc.setLocalDescription(offer);
-        }).then(function () {
-            var localDescription = pc.localDescription;
-            logger.debug('Local description set', localDescription.sdp);
-            if (multistream && usePlanB) {
-                localDescription = interop.toUnifiedPlan(localDescription);
-                logger.debug('offer::origPlanB->UnifiedPlan', dumpSDP(localDescription));
-            }
-            callback(null, localDescription.sdp, self.processAnswer.bind(self));
-        }).catch(callback);
+
+		//check for safari 
+
+        logger.debug("browser##########");
+        logger.debug(globalBrowserDetail.browser);
+
+
+        if(globalBrowserDetail.browser !== "safari") {
+         
+	        logger.debug('constraints: ' + JSON.stringify(constraints));
+
+	        pc.createOffer(constraints).then(function (offer) {
+	            logger.debug('Created SDP offer');
+	            offer = mangleSdpToAddSimulcast(offer);
+	            return pc.setLocalDescription(offer);
+	        }).then(function () {
+	            var localDescription = pc.localDescription;
+	            logger.debug('Local description set', localDescription.sdp);
+	            if (multistream && usePlanB) {
+	                localDescription = interop.toUnifiedPlan(localDescription);
+	                logger.debug('offer::origPlanB->UnifiedPlan', dumpSDP(localDescription));
+	            }
+	            callback(null, localDescription.sdp, self.processAnswer.bind(self));
+	        }).catch(callback);
+	    } else {
+
+	    	pc.createOffer().then(function (offer) {
+	            logger.debug('Created SDP offer');
+	            offer = mangleSdpToAddSimulcast(offer);
+	            return pc.setLocalDescription(offer);
+	        }).then(function () {
+	            var localDescription = pc.localDescription;
+	            logger.debug('Local description set', localDescription.sdp);
+	            if (multistream && usePlanB) {
+	                localDescription = interop.toUnifiedPlan(localDescription);
+	                logger.debug('offer::origPlanB->UnifiedPlan', dumpSDP(localDescription));
+	            }
+	            callback(null, localDescription.sdp, self.processAnswer.bind(self));
+	        }).catch(callback);
+	    }
     };
     this.getLocalSessionDescriptor = function () {
         return pc.localDescription;
