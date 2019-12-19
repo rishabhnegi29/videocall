@@ -205,18 +205,34 @@ function leaveRoom() {
 	 */
 }
 
+/*function receiveVideo(sender) {
+   var participant = new Participant(sender);
+   participants[sender] = participant;
+   var video = participant.getVideoElement();
+
+   var options = {
+      remoteVideo: video,
+      onicecandidate: participant.onIceCandidate.bind(participant)
+    }
+
+   participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(options,
+         function (error) {
+           if(error) {
+              return console.error(error);
+           }
+           this.generateOffer (participant.offerToReceiveVideo.bind(participant));
+   });;
+}
+*/
+
 function receiveVideo(sender) {
 	console.log("<<<<< recieve video >>>>>");
 	var participant = new Participant(sender,admin);
 	participants[sender] = participant;
 	var video = participant.getVideoElement();
 	var constraints = {
-			audio : true/*,
-			video: {
-			    width: { min: 1024, ideal: 1280, max: 1920 },
-			    height: { min: 776, ideal: 720, max: 1080 }
-			  },*/
-	};
+			audio : true
+		};
 	var options = {
       // remoteVideo: video,
       mediaConstraints:constraints,
@@ -224,7 +240,6 @@ function receiveVideo(sender) {
 
 
     }
-    /* ###############Receive Video ##################### */
 	participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(options,
 			function (error) {
 			  if(error) {
@@ -240,12 +255,7 @@ function receiveVideo(sender) {
 			  const stream = new MediaStream()
 			  stream.addTrack(participant.rtcPeer.peerConnection.getReceivers()[0].track);// add
 																							// audio
-			  
-			  
-			
-			/*  participant.rtcPeer.peerConnection.getReceivers()[1].track.addEventListener("mute",
-			  event => { console.log(" video muted"); }, false);
-			 */
+			 
 			  participant.rtcPeer.peerConnection.getReceivers()[1].track.addEventListener("unmute", event => {
 				  console.log(" video un muted");
 				  stream.addTrack(participant.rtcPeer.peerConnection.getReceivers()[1].track);
