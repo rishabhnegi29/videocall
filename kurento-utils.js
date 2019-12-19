@@ -266,7 +266,19 @@ function WebRtcPeer(mode, options, callback) {
             };
         var constraints = browserDependantConstraints;
         logger.debug('constraints: ' + JSON.stringify(constraints));
-        pc.createOffer(constraints).then(function (offer) {
+
+        //check for safari 
+        var constraintsNew ;
+
+        logger.debug("browser##########");
+        logger.debug(browserDetails.browser);
+
+
+        if(browserDetails.browser !== "safari")
+            constraintsNew = constraints;
+
+
+        pc.createOffer(constraintsNew).then(function (offer) {
             logger.debug('Created SDP offer');
             offer = mangleSdpToAddSimulcast(offer);
             return pc.setLocalDescription(offer);
