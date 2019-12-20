@@ -291,7 +291,7 @@ function WebRtcPeer(mode, options, callback) {
 	        }).catch(callback);
 	    } else {
 
-	    	pc.createOffer(navigator.mediaDevices.getSupportedConstraints()).then(function (offer) {
+	    	pc.createOffer(constraints).then(function (offer) {
 	            logger.debug('Created SDP offer');
 	            offer = mangleSdpToAddSimulcast(offer);
 	            return pc.setLocalDescription(offer);
