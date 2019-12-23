@@ -170,12 +170,15 @@ function onExistingParticipants(msg) {
 			participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerSendonly(options,
 				function (error) {
 				  if(error) {
-			//		  console.error(error);
+					  console.error(error);
 					  alert(error);
 				  }
 				  this.generateOffer (participant.offerToReceiveVideo.bind(participant));
 			});
-	}).catch(function (error) { alert(error) })
+	}).catch(function (error) {
+		console.log(error);
+		alert(error);
+	})
 
 	
 
