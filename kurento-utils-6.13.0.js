@@ -321,10 +321,10 @@ function WebRtcPeer(mode, options, callback) {
             useVideo = typeof mediaConstraints.video === 'boolean' ? mediaConstraints.video : true;
         }
         if (useAudio) {
-            pc.addTransceiver('audio', { direction: mode });
+           // pc.addTransceiver('audio', { direction: mode });
         }
         if (useVideo) {
-            pc.addTransceiver('video', { direction: mode });
+            //pc.addTransceiver('video', { direction: mode });
         }
         if (typeof AdapterJS !== 'undefined' && AdapterJS.webrtcDetectedBrowser === 'IE' && AdapterJS.webrtcDetectedVersion >= 9) {
             var setLocalDescriptionOnSuccess = function () {
