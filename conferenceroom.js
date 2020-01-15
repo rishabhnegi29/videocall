@@ -208,7 +208,7 @@ function leaveRoom() {
 	 */
 }
 
-/*function receiveVideo(sender) {
+function receiveVideo(sender) {
    var participant = new Participant(sender);
    participants[sender] = participant;
    var video = participant.getVideoElement();
@@ -226,9 +226,9 @@ function leaveRoom() {
            this.generateOffer (participant.offerToReceiveVideo.bind(participant));
    });;
 }
-*/
 
-function receiveVideo(sender) {
+
+/*function receiveVideo(sender) {
 	console.log("<<<<< recieve video >>>>>");
 	var participant = new Participant(sender,admin);
 	participants[sender] = participant;
@@ -280,7 +280,7 @@ function receiveVideo(sender) {
 	});
 	
 	
-}
+}*/
 
 function onParticipantLeft(request) {
 	console.log('Participant ' + request.name + ' left');
