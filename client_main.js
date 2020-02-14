@@ -12,7 +12,7 @@ $('#loginForm').on('submit', function(e) {
 	e.preventDefault();
 	console.log("clicked");
 	var resp;
-	obj = new SDK("chat.intelimd.com:8443");
+	obj = new SDK("localhost:8443");
 	inputData = {
 		"appKey" : "demdoomoemomdeod",
 		"endTime" : "12-05-2019",

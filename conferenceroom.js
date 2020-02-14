@@ -110,13 +110,18 @@ function register(name, room, mDiv) {
             id: 'joinRoom',
             name: name,
             room: room,
+            videoEnabled:videoFlag
         }
         sendMessage(message);
     }
 }
 
 function onNewParticipant(request) {
-    receiveVideo(request.name);
+    var object = {
+        name: request.name,
+        videoEnabled: request.videoEnabled
+    };
+    receiveVideo(object);
 }
 
 function receiveVideoResponse(result) {
@@ -164,6 +169,18 @@ function onExistingParticipants(msg) {
         video: videoFlag
     })
     promise.then(function(stream) {
+
+    	console.log(stream.getTracks());
+    	console.log(blackSilence().getTracks());
+
+    	if(videoFlag == false) {
+    		//stream.addTrack(blackSilence().getVideoTracks()[0]);
+    		blackSilence().getVideoTracks()[0].stop();
+    		stream = new MediaStream([stream.getAudioTracks()[0],blackSilence().getVideoTracks()[0]]) 
+    	}
+
+    	console.log(stream.getTracks());
+
         var options = {
             localVideo: video, 
             // mediaConstraints: constraints,
@@ -224,60 +241,10 @@ function leaveRoom() {
      */
 }
 
-/*function receiveVideo(sender) {
-    var participant = new Participant(sender);
-    participants[sender] = participant;
-    var video = participant.getVideoElement();
-
-    var options = {
-        remoteVideo: video,
-        onicecandidate: participant.onIceCandidate.bind(participant)
-    }
-
-    participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(options,
-        function(error) {
-            if (error) {
-                return console.error(error);
-            }
-           	const stream = new MediaStream();
-
-           	stream.onaddtrack = function(event) {
-				alert("ontrackAdded");
-				video.srcObject = stream;
-				console.log(stream.getTracks());
-			}
-
-            this.generateOffer(participant.offerToReceiveVideo.bind(participant));
-            console.log("rev video "+sender);
-    		
-
-			participant.rtcPeer.peerConnection.getReceivers()[0].track.onunmute = function(){
-				console.log("audio unmuted");
-				stream.addTrack(participant.rtcPeer.peerConnection.getReceivers()[0].track);
-
-			}; 
-
-			participant.rtcPeer.peerConnection.getReceivers()[1].track.onunmute = function(){
-				console.log("video unmuted");
-				stream.addTrack(participant.rtcPeer.peerConnection.getReceivers()[1].track);
-			};
-
-
-			console.log(participant.rtcPeer.peerConnection.getReceivers());
-    		console.log(participant.rtcPeer.peerConnection.getReceivers()[0].track); 
-			console.log(participant.rtcPeer.peerConnection.getReceivers()[1].track);
-			console.log(stream);
-			alert();
-			
-
-        });
-   
-
-}*/
-
-
-function receiveVideo(sender) {
+function receiveVideo(senderObject) {
 	console.log("<<<<< recieve video >>>>>");
+    console.log(senderObject);
+    sender = senderObject.name;
 	var participant = new Participant(sender,admin);
 	participants[sender] = participant;
 	var video = participant.getVideoElement();
@@ -300,9 +267,8 @@ function receiveVideo(sender) {
 			  console.log(participant.rtcPeer.peerConnection.getReceivers()[1].track);
 
 			  const stream = new MediaStream()
-			  stream.addTrack(participant.rtcPeer.peerConnection.getReceivers()[0].track);// add
-						
-				
+			  //stream.addTrack(participant.rtcPeer.peerConnection.getReceivers()[0].track);// add
+
 			  participant.rtcPeer.peerConnection.getReceivers()[0].track.addEventListener("unmute", event => {
 				  console.log(" audio unmuted");
 				  stream.addTrack(participant.rtcPeer.peerConnection.getReceivers()[0].track);
@@ -319,6 +285,30 @@ function receiveVideo(sender) {
 	
 	
 }
+
+
+/*function receiveVideo(sender) {
+	var participant = new Participant(sender);
+	participants[sender] = participant;
+	var video = participant.getVideoElement();
+
+	var options = {
+      remoteVideo: video,
+      onicecandidate: participant.onIceCandidate.bind(participant)
+    }
+
+	participant.rtcPeer = new kurentoUtils.WebRtcPeer.WebRtcPeerRecvonly(options,
+			function (error) {
+			  if(error) {
+				  return console.error(error);
+			  }
+			  this.generateOffer (participant.offerToReceiveVideo.bind(participant));
+
+			  console.log(participant.rtcPeer.peerConnection.getReceivers());
+	});;
+}*/
+
+
 
 function onParticipantLeft(request) {
     console.log('Participant ' + request.name + ' left');
@@ -566,29 +556,37 @@ function changeVideoConfigrationById(name) {
 
 /* video recorder start */
 var recordingStatus = false; // true for recording and false for not recording
+let recorder = null;
+var chunks = [];
+
 function onRecordStartStop() {
+    
+
     if (recordingStatus == false) {
-        captureScreen(function(screen) {
-            console.log(screen);
-            recorder = new MediaRecorder(screen);
+        captureScreen(function(stream) {
+            console.log(stream);
+            recorder = new MediaRecorder(stream);
             recorder.ondataavailable = handleDataAvailable;
             recorder.start();
             recordingStatus = true;
         });
 
     } else {
-        // recorder.requestData();
-        recorder.stream.getTracks()[1].stop();
-        // recorder.stream.stop();
+        console.log(recorder.stream.getTracks());
+        recorder.stream.getTracks().forEach(function(mediaStreamTrack) {
+            mediaStreamTrack.stop();
+        });
         recorder.stop();
-        recordingStatus = true;
+        recordingStatus = false;
+        var blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' });
+        download(blob);
+        chunks = [];
     }
 }
 
 function handleDataAvailable(event) {
-    console.log("handelData");
-    console.log(event)
-    download(event.data);
+    console.log("handleDataAvailable");
+    chunks.push(event.data);
 
 }
 
@@ -602,48 +600,31 @@ function download(blob) {
     a.click();
     window.URL.revokeObjectURL(url);
 }
-/* Video recorder end */
-
-function invokeGetDisplayMedia(success, error) {
-    var displaymediastreamconstraints = {
-        video: {
-            displaySurface: 'window', // monitor, window, application, browser
-            logicalSurface: true,
-            cursor: 'always' // never, always, motion
-
-        }
-    };
-    displaymediastreamconstraints = {
-        video: true
-    };
-    if (navigator.mediaDevices.getDisplayMedia) {
-        navigator.mediaDevices.getDisplayMedia(displaymediastreamconstraints).then(success).catch(error);
-    } else {
-        navigator.getDisplayMedia(displaymediastreamconstraints).then(success).catch(error);
-    }
-}
 
 function captureScreen(callback) {
-    invokeGetDisplayMedia(function(screen) {
-        /* Add audio Stream into the Stream from the source */
-        navigator.mediaDevices.getUserMedia({
-            audio: true
-        }).then(function(mic) {
-            screen.addTrack(mic.getTracks()[0]);
-            callback(screen);
+    navigator.mediaDevices.getDisplayMedia({video:true, audio:true})
+    .then(function(displayStream){
+        displayStream.getVideoTracks()[0].onended = function() {
+            console.log(recorder.stream.getTracks());
+            recorder.stream.getTracks().forEach(function(mediaStreamTrack) {
+                mediaStreamTrack.stop();
+            });
+            recorder.stop();
+            recordingStatus = false;
+            var blob = new Blob(chunks, { 'type' : 'audio/ogg; codecs=opus' });
+            download(blob);
+            chunks = [];
+        }
+        navigator.mediaDevices.getUserMedia({audio:true})
+        .then(function(audioStream){
+            displayStream.addTrack(audioStream.getAudioTracks()[0]);
+            callback(displayStream);
+        })
+        .catch();
+    }).catch();
 
-        }).catch(function(error) {
-            alert('Unable to access your microphone.');
-            console.log(error);
-        });
-
-
-
-    }, function(error) {
-        console.log(error);
-        alert('Unable to capture your screen. Please check console logs.\n' + error);
-    });
 }
+/* Video recorder end */
 
 /** *** SCREEN SHARING ****** */
 var screenShareStatus = false; // false for active screen sharing and true for
@@ -696,8 +677,8 @@ function onScreenShareConfig(event) {
 
 		    	} else {
 		    		senders[1].track.stop();
-			    	senders[1].replaceTrack(null);
-			    	participants[name].getVideoElement().srcObject = null;
+			    	senders[1].replaceTrack(blackSilence().getVideoTracks()[0]);
+			    	participants[name].getVideoElement().srcObject = new MediaStream([senders[0].track ,senders[1].track]);
 				    screenShareStatus = false;
 		    	}	
             }
@@ -727,8 +708,8 @@ function onScreenShareConfig(event) {
 
     	} else {
     		senders[1].track.stop();
-	    	senders[1].replaceTrack(null);
-	    	participants[name].getVideoElement().srcObject = null;
+	    	senders[1].replaceTrack(blackSilence().getVideoTracks()[0]);
+			participants[name].getVideoElement().srcObject = new MediaStream([senders[0].track ,senders[1].track]);
 		    screenShareStatus = false;
     	}
 
@@ -829,3 +810,22 @@ function getIcon(fileName) {
 
     return icon;
 }
+
+
+let silence = () => {
+  let ctx = new AudioContext(), oscillator = ctx.createOscillator();
+  let dst = oscillator.connect(ctx.createMediaStreamDestination());
+  oscillator.start();
+  return Object.assign(dst.stream.getAudioTracks()[0], {enabled: false});
+}
+
+let black = ({width = 640, height = 480} = {}) => {
+  let canvas = Object.assign(document.createElement("canvas"), {width, height});
+  canvas.getContext('2d').fillRect(0, 0, width, height);
+  let stream = canvas.captureStream();
+  return Object.assign(stream.getVideoTracks()[0], {enabled: false});
+}
+
+let blackSilence = (...args) => new MediaStream([black(...args), silence()]);
+
+//video.srcObject = blackSilence();
